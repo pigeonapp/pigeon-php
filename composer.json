@@ -1,0 +1,28 @@
+{
+    "name": "pigeon/pigeon",
+    "description": "Pigeon lets you easily manage your outbound email, push notifications and SMS. Visit https://pigeonapp.io for more details.",
+    "type": "library",
+    "keywords": ["pigeon", "pigeonapp", "email", "sms", "push notification"],
+    "homepage": "https://pigeonapp.io",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rinas Muhammed",
+            "email": "rinas@keepworks.com"
+        }
+    ],
+    "support": {
+        "email": "support@pigeonapp.io"
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pigeon\\Pigeon\\": "src"
+        }
+    },
+    "scripts": {
+        "stylefix": "php-cs-fixer fix"
+    }
+}
