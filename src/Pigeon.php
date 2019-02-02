@@ -6,9 +6,11 @@
  * This source file is subject to the MIT license that is bundled.
  */
 
-use GuzzleHttp\Client;
+namespace Pigeon;
 
-class Pigeon
+use GuzzleHttp\Client as HttpClient;
+
+class Client
 {
     /**
      * Base URI.
@@ -64,7 +66,7 @@ class Pigeon
      */
     public function deliver($message_identifier, $parcels = null)
     {
-        $client = new Client([
+        $client = new HttpClient([
             'base_uri' => $this->base_uri ?: static::BASE_URI,
         ]);
 
@@ -80,9 +82,7 @@ class Pigeon
                 ],
             ]);
         } catch (Exception $e) {
-            echo $e->getMessage()."\n";
-
-            return;
+            return $e->getMessage()."\n";
         }
 
         $body = $response->getBody()->getContents();

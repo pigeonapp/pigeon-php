@@ -16,7 +16,7 @@ $ composer require pigeon/pigeon
 Public (`PIGEON_PUBLIC_KEY`) and private (`PIGEON_PRIVATE_KEY`) keys would be retrieved from the env variables if not passed.
 
 ```php
-$pigeon = new Pigeon('PIGEON_PUBLIC_KEY', 'PIGEON_PRIVATE_KEY');
+$pigeon = new Pigeon\Client('PIGEON_PUBLIC_KEY', 'PIGEON_PRIVATE_KEY');
 $pigeon->deliver('message-identifier', ['to' => 'user@example.com']);
 ```
 
