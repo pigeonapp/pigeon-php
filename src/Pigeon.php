@@ -1,14 +1,10 @@
 <?php
 
-/*
- * This file is part of the pigeon/pigeon.
- *
- * This source file is subject to the MIT license that is bundled.
- */
-
 namespace Pigeon;
 
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\ClientException;
+use Pigeon\Exceptions\PigeonException;
 
 class Client
 {
@@ -66,6 +62,18 @@ class Client
      */
     public function deliver($message_identifier, $parcels = null)
     {
+        if (empty($this->public_key)) {
+            throw PigeonException::missingToken('PIGEON_PUBLIC_KEY');
+        }
+
+        if (empty($this->private_key)) {
+            throw PigeonException::missingToken('PIGEON_PRIVATE_KEY');
+        }
+
+        if (empty($message_identifier)) {
+            throw PigeonException::missingMessageIdentifer();
+        }
+
         $client = new HttpClient([
             'base_uri' => $this->base_uri ?: static::BASE_URI,
         ]);
@@ -81,12 +89,16 @@ class Client
                     'parcels' => $parcels,
                 ],
             ]);
-        } catch (Exception $e) {
-            return $e->getMessage()."\n";
+        } catch (ClientException $exception) {
+            if ($errors = json_decode($exception->getResponse()->getBody(), true)) {
+                return $errors;
+            }
+
+            throw PigeonException::error($exception);
+        } catch (\Exception $exception) {
+            throw PigeonException::connectionError($exception);
         }
 
-        $body = $response->getBody()->getContents();
-
-        return json_decode($body, true);
+        return json_decode($response->getBody()->getContents(), true);
     }
 }
