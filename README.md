@@ -13,12 +13,42 @@ $ composer require pigeon/pigeon
 
 ## Usage
 
-Public (`PIGEON_PUBLIC_KEY`) and private (`PIGEON_PRIVATE_KEY`) keys would be retrieved from the env variables if not passed.
-
 ```php
 $pigeon = new Pigeon\Client('PIGEON_PUBLIC_KEY', 'PIGEON_PRIVATE_KEY');
-$pigeon->deliver('message-identifier', ['to' => 'user@example.com']);
 ```
+Public (`PIGEON_PUBLIC_KEY`) and private (`PIGEON_PRIVATE_KEY`) keys would be retrieved from the env variables if not passed.
+
+### Prepare for the delivery
+```php
+$message_identifier = 'message-identifier';
+$parcels = ['to' => 'john@example.com'];
+```
+- Message identifier is used to identify the message. Grab this from your Pigeon dashboard.
+- Parcels array accepts `to`, `cc`, `bcc` and `data`.
+
+### Deliver
+```php
+$pigeon->deliver($message_identifier, $parcels);
+```
+
+### Parcel sample
+```php
+$parcels = [
+  'to' => 'John Doe <john@example.com>',
+  'cc' => [
+    'admin@example.com',
+    'Sales Team <sales@example.com>'
+  ],
+  'data' => [
+    // message placeholder values are added here
+    'greeting' => 'Hello John!'
+  ]
+];
+```
+
+## Framework integration
+
+- [Laravel](https://github.com/pigeonapp/pigeon-laravel)
 
 ## Contributing
 
@@ -28,9 +58,6 @@ You can contribute in one of two ways:
 2. Answer questions or fix bugs on the [issue tracker](https://github.com/pigeonapp/pigeon-php/issues).
 
 This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
-
-_The code contribution process is not very formal. You just need to make sure that you follow the PSR-0, PSR-1, and PSR-2 coding guidelines. Any new code contributions must be accompanied by unit tests where applicable._
 
 ## License
 
