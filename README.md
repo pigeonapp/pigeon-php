@@ -1,7 +1,6 @@
-<h1 align="center">Pigeon</h1>
+# Pigeon
 
-<p align="center">Pigeon lets you easily manage your outbound email, push notifications and SMS. Visit https://pigeonapp.io for more details.</p>
-
+Pigeon lets you easily manage your outbound email, push notifications and SMS. Visit https://pigeonapp.io for more details.
 
 ## Installation
 
@@ -16,22 +15,27 @@ $ composer require pigeon/pigeon
 ```php
 $pigeon = new Pigeon\Client('PIGEON_PUBLIC_KEY', 'PIGEON_PRIVATE_KEY');
 ```
+
 Public (`PIGEON_PUBLIC_KEY`) and private (`PIGEON_PRIVATE_KEY`) keys would be retrieved from the env variables if not passed.
 
 ### Prepare for the delivery
+
 ```php
 $message_identifier = 'message-identifier';
 $parcels = ['to' => 'john@example.com'];
 ```
+
 - Message identifier is used to identify the message. Grab this from your Pigeon dashboard.
 - Parcels array accepts `to`, `cc`, `bcc` and `data`.
 
 ### Deliver
+
 ```php
 $pigeon->deliver($message_identifier, $parcels);
 ```
 
-### Parcel sample
+### Parcel sample (Single recipient)
+
 ```php
 $parcels = [
   'to' => 'John Doe <john@example.com>',
@@ -40,9 +44,30 @@ $parcels = [
     'Sales Team <sales@example.com>'
   ],
   'data' => [
-    // message placeholder values are added here
-    'greeting' => 'Hello John!'
+    // template variables are added here
+    'name' => 'John'
   ]
+];
+```
+
+### Parcel sample (Multiple recipients)
+
+```php
+$parcels = [
+  [
+    'to' => 'John Doe <john@example.com>',
+    'data' => [
+      // template variables are added here
+      'name' => 'John'
+    ]
+  ],
+  [
+    'to' => 'Jane Doe <jane@example.com>',
+    'data' => [
+      // template variables are added here
+      'name' => 'Jane'
+    ]
+  ],
 ];
 ```
 
