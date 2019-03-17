@@ -46,6 +46,17 @@ $parcels = [
   'data' => [
     // template variables are added here
     'name' => 'John'
+  ],
+  'attachments' => [
+    // `file` can be either local file path or remote URL
+    [
+      'file' => '/path/to/image.png',
+      'name' => 'Logo'
+    ],
+    [
+      'file' => 'https://example.com/guide.pdf',
+      'name' => 'Guide'
+    ]
   ]
 ];
 ```
