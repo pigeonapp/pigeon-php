@@ -62,6 +62,16 @@ class Client
      */
     public function deliver($message_identifier, $parcels = null)
     {
+        foreach ((array)$parcels as $parcel_key => &$parcel) {
+            if (isset($parcel['attachments'])) {
+                foreach ($parcel['attachments'] as &$attachment) {
+                    if (filter_var($attachment['file'], FILTER_VALIDATE_URL) === FALSE) {
+                        $attachment['file'] = base64_encode($attachment['file']);
+                    }
+                }
+            }
+        }
+
         if (empty($this->public_key)) {
             throw PigeonException::missingToken('PIGEON_PUBLIC_KEY');
         }
