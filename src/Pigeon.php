@@ -74,15 +74,7 @@ class Client
             throw PigeonException::missingMessageIdentifer();
         }
 
-        foreach ((array)$parcels as $parcel_key => &$parcel) {
-            if (isset($parcel['attachments'])) {
-                foreach ($parcel['attachments'] as &$attachment) {
-                    if (filter_var($attachment['file'], FILTER_VALIDATE_URL) === FALSE) {
-                        $attachment['file'] = base64_encode($attachment['file']);
-                    }
-                }
-            }
-        }
+        $parcels = $this->processAttachments($parcels);
 
         $client = new HttpClient([
             'base_uri' => $this->base_uri ?: static::BASE_URI,
@@ -110,5 +102,31 @@ class Client
         }
 
         return json_decode($response->getBody()->getContents(), true);
+    }
+
+    /**
+     * Process attachments.
+     *
+     * @param array $parcels
+     *
+     * @return array
+     */
+    public function processAttachments($parcels)
+    {
+        foreach ((array)$parcels as $key => $parcel) {
+            if (isset($parcel['attachments'])) {
+                foreach ($parcel['attachments'] as $key => $attachment) {
+                    if (filter_var($attachment['file'], FILTER_VALIDATE_URL) === FALSE) {
+                        $file_content = file_get_contents($attachment['file']);
+                        $attachment['file'] = base64_encode($file_content);
+                        $parcel['attachments'][$key] = $attachment;
+                    }
+                }
+            }
+
+            $parcels[$key] = $parcel;
+        }
+
+        return $parcels;
     }
 }
