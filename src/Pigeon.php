@@ -117,9 +117,10 @@ class Client
             if (isset($parcel['attachments'])) {
                 foreach ($parcel['attachments'] as $key => $attachment) {
                     if (filter_var($attachment['file'], FILTER_VALIDATE_URL) === FALSE) {
-                        $file_content = file_get_contents($attachment['file']);
-                        $attachment['file'] = base64_encode($file_content);
+                        $attachment['content'] = base64_encode(file_get_contents($attachment['file']));
                         $parcel['attachments'][$key] = $attachment;
+
+                        unset($attachment['file']);
                     }
                 }
             }
