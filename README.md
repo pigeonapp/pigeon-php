@@ -48,7 +48,7 @@ $parcels = [
     'name' => 'John'
   ],
   'attachments' => [
-    // `file` can be either local file path or remote URL
+    // `file` can be local file path, remote URL or a file pointer resource
     [
       'file' => '/path/to/image.png',
       'name' => 'Logo'

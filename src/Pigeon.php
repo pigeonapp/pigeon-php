@@ -116,8 +116,16 @@ class Client
         foreach ((array)$parcels as $key => $parcel) {
             if (isset($parcel['attachments'])) {
                 foreach ($parcel['attachments'] as $key => $attachment) {
-                    if (filter_var($attachment['file'], FILTER_VALIDATE_URL) === FALSE) {
-                        $attachment['content'] = base64_encode(file_get_contents($attachment['file']));
+                    $file = $attachment['file'];
+
+                    // convert file to local file path
+                    if (is_resource($file) && get_resource_type($file) === 'stream') {
+                        $file = stream_get_meta_data($file)['uri'];
+                    }
+
+                    // handle local file path
+                    if (file_exists($file)) {
+                        $attachment['content'] = base64_encode(file_get_contents($file));
                         $parcel['attachments'][$key] = $attachment;
 
                         unset($attachment['file']);
